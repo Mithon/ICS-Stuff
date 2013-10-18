@@ -113,21 +113,23 @@ public class HC_Loopsassignment {
 				}
 				while (int1 != 0);
 				break;
-			case 12:
-				int digit = 0;
-				int sum = 0;
-				int input = 0;
-				do {
-				input = JOptionPane.showInputDialog("Enter an integer (type exit to exit)");
-				do {
-					digit = input.charAt(0);
-					sum += digit;
-					i++;
-				}
-				while (digit == '1' || digit == '2' || digit == '3' || digit == '4' || digit == '5' || digit == '6' || digit == '7' || digit == '8' || digit == '9' || digit == '0');					
-				System.out.println("The sum of the digits is: " + sum);
-				}
-				while (input != "exit");
+	                        case 12:
+                                int digit = 0;
+                                int sum = 0;
+                                String input = null;
+                                int i = 0;
+                                do {
+                                input = JOptionPane.showInputDialog("Enter an integer (type exit to exit)");
+                                do {
+                                        digit = input.charAt(i);
+                                        sum += digit;
+                                        i++;
+                                }
+                                while (digit == '1' || digit == '2' || digit == '3' || digit == '4' || digit == '5' || digit == '6' || digit == '7' || digit == '8' || digit == '9' || digit == '0');                                        
+                                System.out.println("The sum of the digits is: " + sum);
+                                }
+                                while (input != "exit");
+
 
 			}
 
