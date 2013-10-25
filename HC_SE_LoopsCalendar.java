@@ -31,16 +31,16 @@ public class HC_SM_NestedLoops_3 {
 				for (int day = 0; day <= (7 - cal.get(Calendar.DAY_OF_WEEK)); day++)	{
 					cal.set(y,(m+1), d);
 					d++;
+					currentDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 				if (Integer.toString(d).length() == 1)	{
 					if (d > 0)
-						System.out.print(" " + dual.format(d)+ " ");
+						System.out.print(" " + dual.format(currentDayOfMonth)+ " ");
 					else
 						System.out.print(" " + " " + " ");
 				}
 				else	{
-					System.out.print(dual.format(d)+ " ");
 					if (d > 0)
-						System.out.print(" " + dual.format(d)+ " ");
+						System.out.print(" " + dual.format(currentDayOfMonth)+ " ");
 					else
 						System.out.print(" " + "  " + " ");
 				}
@@ -48,7 +48,6 @@ public class HC_SM_NestedLoops_3 {
 			}
 			System.out.println();
 		}
-
 	}
 
 }
