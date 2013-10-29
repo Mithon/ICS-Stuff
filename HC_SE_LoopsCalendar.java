@@ -17,7 +17,7 @@ public class HC_SM_NestedLoops_3 {
 		int begin = cal.get(Calendar.DAY_OF_WEEK);
 		DecimalFormat dual = new DecimalFormat("##");
 		String[] months = new java.text.DateFormatSymbols().getMonths();
-		int d = begin-6;
+		int d = begin*-1+2;
 		//days in month
 		int[] dim = {31,28,31,30,31,30,31,31,30,31,30,31};
 		if (y%4 == 0)
