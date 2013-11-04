@@ -12,7 +12,6 @@ public class MethodAssingmentB_HC {
 	 */
 	public static void main(String[] args) {
 		randomNumber();
-		System.out.println(gcd(36,15));
 	}
 	//1. a)
 	public static int randomNumber ()	{
@@ -95,5 +94,25 @@ public class MethodAssingmentB_HC {
 		return a;
 	}
 	//#6
-	
+	public static boolean isDivisible (int a, int b)	{
+		if (a%b == 0)
+			return true;
+		else
+			return false;
+	}
+	//#7
+	public static boolean isPrime (int a)	{
+		for (int i=2; i<a; i++)	{
+			if (a%i == 0)
+				return false;
+		}
+		return true;
+	}
+	//#8
+	public static boolean isLetter (char a)	{
+		if (Character.isLetter(a))
+			return true;
+		else
+			return false;
+	}
 }
