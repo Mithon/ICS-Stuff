@@ -11,7 +11,17 @@ public class MethodAssingmentB_HC {
 	 * Methods 10b
 	 */
 	public static void main(String[] args) {
-		randomNumber();
+	System.out.println(randomNumber());
+	System.out.println(randomNumber(10));
+	System.out.println(randomNumber(1, 10));
+	System.out.println(randomNumber(5, 50, 5));
+	System.out.println(mystery(1, 10));
+	System.out.println(mystery2(1, 10));
+	System.out.println(largest(1, 10, 60));
+	System.out.println(gcd(30, 90));
+	System.out.println(isDivisible(14, 7));
+	System.out.println(isPrime(11));
+	System.out.println(isLetter('|'));
 	}
 	//1. a)
 	public static int randomNumber ()	{
@@ -86,13 +96,18 @@ public class MethodAssingmentB_HC {
 	public static int gcd (int x, int y)	{
 		int max = Collections.max(Arrays.asList(x, y));
 		int min = Collections.min(Arrays.asList(x, y));
-		int a = max%min;
-		int b = min%a;
-		while (b !=0)	{
-			b = gcd(a, b);
+		return INNERgcd(max, min);
+	}
+	public static int INNERgcd (int a, int b)	{
+		while(b > 0)
+		{
+			int c = a % b;
+			a = b;
+			b = c;
 		}
 		return a;
 	}
+
 	//#6
 	public static boolean isDivisible (int a, int b)	{
 		if (a%b == 0)
