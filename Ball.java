@@ -2,22 +2,28 @@ import java.awt.*;
 
 class Ball 
 {
-
+	
 	public static final int WIDTH = 20;                        // Ball height, width
 	public static final int HEIGHT = 20;
 
 	public int x = 150;                                              // Current x,y
 	public int y = 60;
-
+	
+	
 	public int dx = 10;                                               // Distance moved
 	public int dy = 10; 
 
 	public Ball()
 	{ 
 		
-		                
 	} 
 
+	public void startLOC(int a, int b)
+	{
+		x = a;
+		y = b;
+	}
+	
 	public void paint(Graphics g) {      
 		draw(Color.black,g);
 	}
@@ -36,7 +42,7 @@ class Ball
 	{
 		try { Thread.sleep(t); } catch(Exception e) {}
 	}
-	public void move() {  
+	public void move(Frame f) {
 		x = x + dx; 											 // Move x
 		y = y + dy;                                            // Move y
 
@@ -44,19 +50,19 @@ class Ball
 			x = 0; 
 			dx = -dx; 
 		}                  
-/**
-		if (x + WIDTH >= getWidth()) {               // Hit right wall
-			x = getWidth() - WIDTH;             
+
+		if (x + WIDTH >= f.getWidth()) {               // Hit right wall
+			x = f.getWidth() - WIDTH;             
 			dx = -dx;
 		} 
 		if (y < 25) {                                            // Hit top wall
 			y = 25; 
 			dy = -dy; 
 		}                                                           
-		if (y + HEIGHT >= getHeight()) {             // Hit bottom wall
-			y = getHeight() - HEIGHT; 
-			dy = -dy; 
-		}   **/
+		if (y + HEIGHT >= f.getHeight()) {             // Hit bottom wall
+			y = f.getHeight() - HEIGHT; 
+			dy = -dy;
+		}
 	}
 }
 
