@@ -2,20 +2,20 @@ import java.awt.*;
 
 class Ball 
 {
-	
-	public static final int WIDTH = 20;                        // Ball height, width
-	public static final int HEIGHT = 20;
+
+	public static final int WIDTH = 50;                        // Ball height, width
+	public static final int HEIGHT = 50;
 
 	public int x = 150;                                              // Current x,y
 	public int y = 60;
-	
-	
+
+
 	public int dx = 10;                                               // Distance moved
 	public int dy = 10; 
 
 	public Ball()
 	{ 
-		
+
 	} 
 
 	public void startLOC(int a, int b)
@@ -23,7 +23,7 @@ class Ball
 		x = a;
 		y = b;
 	}
-	
+
 	public void paint(Graphics g) {      
 		draw(Color.black,g);
 	}
@@ -43,7 +43,7 @@ class Ball
 		try { Thread.sleep(t); } catch(Exception e) {}
 	}
 	public void move(Frame f) {
-		x = x + dx; 											 // Move x
+		x = x + dx;                                                                                          // Move x
 		y = y + dy;                                            // Move y
 
 		if (x < 0) {                                            // Hit left wall
@@ -65,4 +65,3 @@ class Ball
 		}
 	}
 }
-
