@@ -2,7 +2,6 @@ import java.awt.*;
 
 class Ball 
 {
-
 	public static final int WIDTH = 50;                        // Ball height, width
 	public static final int HEIGHT = 50;
 

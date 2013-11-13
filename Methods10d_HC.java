@@ -15,7 +15,7 @@ public class Methods10d_HC {
 		f.setBackground(Color.white);
 		Graphics g = f.getGraphics();
 
-		Ball(g, Color.LIGHT_GRAY, Color.GRAY, f, 150, 60, 500, 60);
+		Ball(g, Color.LIGHT_GRAY, Color.GRAY, f, 150, 60, 200, 500);
 	}
 	public static void Ball(Graphics g, Color c, Color c2, Frame f,int x, int y,int x2, int y2)        {
 		Ball b = new Ball();
@@ -23,15 +23,17 @@ public class Methods10d_HC {
 		b.startLOC(x,y);
 		a.startLOC(x2,y2);
 		double d = 100;
-		for (int i=1; i<200; i++)        {
+		int r1;
+		for (int i=1; i<1000; i++)        {
+			r1 = 1 + (int)(Math.random() * ((2 - 1) + 1));
 			move(g,c,f,b);
 			move(g,c2,f,a);
 			d = Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
-			if (d<50)	{
-				a.dx = -a.dx;
-				a.dy = -a.dy;
-				b.dx = -b.dx;
-				b.dy = -b.dy;
+			if (d<60)	{
+				a.dx = -a.dx+r1;
+				a.dy = -a.dy+r1;
+				b.dx = -b.dx+r1;
+				b.dy = -b.dy+r1;
 			}	
 		}
 		System.exit(0); 
@@ -43,7 +45,7 @@ public class Methods10d_HC {
 
 		b.draw(c,g);
 
-		b.delay(30);
+		b.delay(20);
 	}
 
 
