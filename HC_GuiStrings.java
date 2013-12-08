@@ -1,193 +1,133 @@
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Calendar;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
-public class HC_GuiStrings {
+public class Eleven_D_HC {
 
 	/**
-	 * @param args
+	 * @author Hunter Caron
+	 * Mr.Marco
+	 * Strings Assignment 11a
+	 * part 2
 	 */
 
 	public static void main(String[] args) {
+		//creating frame
 		final JFrame frame = new JFrame();
-		frame.setBounds(450, 200, 350, 230);
+		frame.setBounds(450, 200, 600, 106);
 		frame.getContentPane().setLayout(null);
-		frame.setTitle("Hunter's Strings Lab");
+		frame.setTitle("Hunter & Sherif's Profanity Cleaner and Pattern Maker");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final Calendar calendar = Calendar.getInstance();
+		
+		final JFrame output = new JFrame();
+		output.setBounds(450, 200, 400, 300);
+		output.getContentPane().setLayout(null);
+		output.setTitle("Output");
+		output.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//output text field
+		final JTextArea print = new JTextArea();
+		print.setSize(output.getSize());
+		print.setEditable(false);
+		output.add(print);
 
-		JLabel label1 = new JLabel("Input #1:");
-		label1.setBounds(20,20,60,15);
+		//input 1 label
+		JLabel label1 = new JLabel("Input:");
+		label1.setBounds(15,15,60,15);
 		label1.setFont((new Font(null, Font.BOLD, 14)));
 		frame.add(label1);
 
-		final JTextField field1 = new JTextField();
-		field1.setBounds(90,20,100,20);
-		frame.add(field1);
+		//input box
+		final JTextField field = new JTextField();
+		field.setBounds(65,14,500,20);
+		frame.add(field);
 
-		JLabel label2 = new JLabel("Input #2:");
-		label2.setBounds(20,50, 60, 15);
-		label2.setFont((new Font(null, Font.BOLD, 14)));
-		frame.add(label2);
+		//initials button
+		final JButton profanity = new JButton("Clear Profanity");
+		profanity.setBounds(65,40,120,19);
+		frame.add(profanity);
 
-		final JTextField field2 = new JTextField();
-		field2.setBounds(90,49,100,20);
-		frame.add(field2);
-
-		JLabel label3 = new JLabel("Output:");
-		label3.setBounds(28,79, 60, 15);
-		label3.setFont((new Font(null, Font.BOLD, 14)));
-		frame.add(label3);
-		
-		final JLabel since = new JLabel("");
-		since.setBounds(20,110, 170, 20);
-		since.setFont((new Font(null, Font.BOLD, 12)));
-		frame.add(since);
-		since.setVisible(false);
-		since.setBorder(BorderFactory.createLoweredBevelBorder());
-
-		final JLabel output = new JLabel("");
-		output.setBounds(89,79, 60, 15);
-		output.setFont((new Font(null, Font.BOLD, 14)));
-		frame.add(output);        
-
-		final JButton init = new JButton("Initials");
-		init.setBounds(210,20,110,19);
-		frame.add(init);
-
-		init.addActionListener(new ActionListener() {
+		profanity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (field1.getText().equals("") && field2.getText().equals(""))
-					JOptionPane.showMessageDialog(null, "Please enter text into the input fields","Input Error",JOptionPane.ERROR_MESSAGE);
-				else if (field1.getText().equals("") || field2.getText().equals(""))
-					JOptionPane.showMessageDialog(null, "Please enter text into the empty field","Input Error",JOptionPane.ERROR_MESSAGE);
-				String i1 = field1.getText();
-				String i2 = field2.getText();
-				char first = i1.charAt(0);
-				char last = i2.charAt(0);
-				String initials = (Character.toString(first) + "." + Character.toString(last) + ".").toUpperCase();
-				output.setText(initials);
+				if (field.getText().equals(""))
+                    JOptionPane.showMessageDialog(null, "Please enter text into the field","Input Error",JOptionPane.ERROR_MESSAGE);
+				String input = field.getText();
+				String cleaned;
+				String c1, c2, c3, c4, c5, c6, c7, c8;
+				c1 = cleaner(input,"fuck");
+				c2 = cleaner(c1,"python");
+				c3 = cleaner(c2,"cunt");
+				c4 = cleaner(c3,"stupid");
+				c5 = cleaner(c4,"dick");
+				c6 = cleaner(c5,"bitch");
+				c7 = cleaner(c6,"c#");
+				c8 = cleaner(c7,"whore");
+				cleaned = cleaner(c8,"slut");
+				print.setText(cleaned);
+				output.setVisible(true);
 			}
 		});
 
-		final JButton ana = new JButton("Anagram");
-		ana.setBounds(210,50,110,19);
-		frame.add(ana);
+		final JButton diamond = new JButton("Make Diamond");
+		diamond.setBounds(195,40,120,19);
+		frame.add(diamond);
 
-		ana.addActionListener(new ActionListener() {
+		diamond.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (field1.getText().equals("") && field2.getText().equals(""))
-					JOptionPane.showMessageDialog(null, "Please enter text into the input fields","Input Error",JOptionPane.ERROR_MESSAGE);
-				else if (field1.getText().equals("") || field2.getText().equals(""))
-					JOptionPane.showMessageDialog(null, "Please enter text into the empty field","Input Error",JOptionPane.ERROR_MESSAGE);
-				String one = field1.getText().replaceAll("\\s+","").toLowerCase();
-				String two = field2.getText().replaceAll("\\s+","").toLowerCase();
-				int Lone = one.length();
-				int Ltwo = two.length();
-				char[] Aone = one.toCharArray();
-				char[] Atwo = two.toCharArray();
-				int counter = 0;
-				boolean isAnagram = false;
-				if (Lone == Ltwo)	{
-					for (int x = 0; x < Lone; x++)	{
-						for (int y = 0; y < Lone; y++)	{
-							if (Arrays.asList(Atwo[y]).contains(Aone[x]))	{
-								counter++;
-							}
-						}
-						if (counter >= 1)	{
-							isAnagram = true;
-							counter = 0;
-						}
-						else	{
-							isAnagram = false;
-							break;
-						}
-
+				if (field.getText().equals(""))
+                    JOptionPane.showMessageDialog(null, "Please enter text into the field","Input Error",JOptionPane.ERROR_MESSAGE);
+				StringBuffer diamond = new StringBuffer();
+				String x = field.getText().replaceAll("\\W+","").toUpperCase();
+				for(int line=0;line<=x.length()-1;line++){
+					for(int space=x.length()-1;space>=line;space--){
+						diamond.append(" ");
 					}
+					int c= line;
+					diamond.append(x.charAt(c));
+					for(int space=0;space<=2*line-2;space++){
+						diamond.append(" ");
+					}
+					if(c!=0){
+						diamond.append(x.charAt(c));
+					}
+					c++;
+
+					diamond.append("\n");
+					print.setText(diamond.toString());
+					output.setVisible(true);
 				}
-				else
-					isAnagram = false;
-				output.setText(String.valueOf(isAnagram));
 			}
 		});
 
-		final JButton word = new JButton("Word Search");
-		word.setBounds(210,79,110,19);
-		frame.add(word);
-
+		//adds clear button
 		final JButton clear = new JButton("Clear All");
-		clear.setBounds(210,110,110,19);
+		clear.setBounds(210,145,110,32);
 		frame.add(clear);
 
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				field1.setText("");
-				field2.setText("");
-			}
-		});
-
-		final JButton party = new JButton("PARTY", (new ImageIcon(((new ImageIcon("src/partyhat.png").getImage().getScaledInstance(20, 25,java.awt.Image.SCALE_SMOOTH))))));
-		party.setBounds(18,145, 303, 32);
-		party.setFont((new Font(null, Font.BOLD, 14)));
-		frame.add(party);
-
-		party.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (party.getText().equals("PARTY"))	{
-					init.setBackground(Color.red);
-					init.setForeground(Color.white);
-					ana.setBackground(Color.blue);
-					ana.setForeground(Color.white);
-					word.setBackground(Color.magenta);
-					word.setForeground(Color.white);
-					clear.setBackground(Color.green);
-					clear.setForeground(Color.DARK_GRAY);
-					party.setBackground(Color.orange);
-					field1.setBackground(Color.yellow);
-					field2.setBackground(Color.CYAN);
-					frame.getContentPane().setBackground(Color.PINK);
-					party.setText("STOP PARTYING");
-					String time;
-					if (calendar.get(Calendar.AM_PM) == 0)
-						time = "am";
-					else
-						time = "pm";
-					since.setText(" BEEN PARYTING SINCE " + calendar.get(Calendar.HOUR)+ time);
-					since.setVisible(true);
-				}
-				else	{
-					since.setVisible(false);
-					init.setBackground(null);
-					init.setForeground(null);
-					ana.setBackground(null);
-					ana.setForeground(null);
-					word.setBackground(null);
-					word.setForeground(null);
-					clear.setBackground(null);
-					clear.setForeground(null);
-					party.setBackground(null);
-					field1.setBackground(Color.white);
-					field2.setBackground(Color.white);
-					frame.getContentPane().setBackground(null);
-					party.setText("PARTY");
-				}
+				//sets the field to empty
+				field.setText("");
 			}
 		});
 
 		frame.setVisible(true);
+	}
+	public static String cleaner(String str, String profanity)        {
+		int len = profanity.length();
+		StringBuffer bleep = new StringBuffer("");
+		for (int i = 0; i < len; i++)
+			bleep.append("*");
+		String output = str.replaceAll(profanity, bleep.toString());
+		return output;
 	}
 
 }
