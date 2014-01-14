@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
-public class TicTacToe extends JFrame implements ActionListener
+public class TicTacToe_HC extends JFrame implements ActionListener
 {
 
 	private static final int BOARD_SIZE = 3;
@@ -18,14 +18,17 @@ public class TicTacToe extends JFrame implements ActionListener
 	private JLabel score;
 	private int emptySquaresLeft;
 	private String whoseTurn;
+	private JCheckBox compMode;
+	private Boolean comp = false;
 
 
 	/** 
 	 * Construct a TicTacToe game with a nice user interface
 	 */ 
-	public TicTacToe()
+	public TicTacToe_HC()
 	{       
 		setUpInterface();
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		board = new String[BOARD_SIZE][BOARD_SIZE];
 		initializeBoard();
@@ -41,6 +44,7 @@ public class TicTacToe extends JFrame implements ActionListener
 
 		setTitle("TicTacToe");
 		setSize(400,400);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		// Get the content pane - 
 		// all window components go there
@@ -48,7 +52,7 @@ public class TicTacToe extends JFrame implements ActionListener
 
 		//Set the layout manager and background color
 		contentPane.setLayout(new BorderLayout());
-		contentPane.setBackground(Color.CYAN);
+		contentPane.setBackground(Color.LIGHT_GRAY);
 
 		// Create the button New Game and register it 
 		// with the action listener 
@@ -57,6 +61,22 @@ public class TicTacToe extends JFrame implements ActionListener
 
 		JPanel topPanel = new JPanel();
 		topPanel.add(newGameButton);
+
+		compMode = new JCheckBox("computer");
+		compMode.setSelected(false);
+		topPanel.add(compMode);
+
+		compMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (((JCheckBox)compMode).isSelected()) {
+					setCompMode();
+					comp = true;
+				}
+				else
+					comp = false;
+			}
+		});
+
 
 		contentPane.add(topPanel,"North");
 
@@ -95,15 +115,16 @@ public class TicTacToe extends JFrame implements ActionListener
 			for (int j=0; j < BOARD_SIZE; j++)
 			{
 				board[i][j] = "";
-				squares[i][j].setBackground(Color.YELLOW);
+				squares[i][j].setBackground(Color.CYAN);
 				squares[i][j].setEnabled(true);
 				squares[i][j].setText("");
 			}
 		}    
-
 		emptySquaresLeft = BOARD_SIZE*BOARD_SIZE;
 		whoseTurn = "X";
 		score.setText(whoseTurn + "'s turn");
+		if (((JCheckBox)compMode).isSelected())
+			setCompMode();
 		newGameButton.setEnabled(false);
 	}
 
@@ -123,6 +144,7 @@ public class TicTacToe extends JFrame implements ActionListener
 			initializeBoard();
 			return;  // exit the method here
 		}
+
 
 		// Which square was clicked?
 		for (int i=0; i < BOARD_SIZE; i++ )
@@ -153,6 +175,13 @@ public class TicTacToe extends JFrame implements ActionListener
 					else
 					{
 						endTheGame();
+						if (comp == true) {
+							if (winner == "X")
+								score.setText("You won!");
+							else
+								score.setText("The computer won!");
+						}
+						else
 						score.setText(winner + " won!");
 					} 
 					return;
@@ -174,7 +203,16 @@ public class TicTacToe extends JFrame implements ActionListener
 		{
 			whoseTurn = "X";
 		}
-		score.setText(whoseTurn + "'s turn");
+		if (((JCheckBox)compMode).isSelected()) {
+			if (whoseTurn == "X")
+				score.setText("Your turn");
+			else
+				score.setText("Computer's turn");
+		}
+		else
+			score.setText(whoseTurn + "'s turn");
+		if (comp == true)
+			compTurn();
 	}
 
 	/*
@@ -187,30 +225,27 @@ public class TicTacToe extends JFrame implements ActionListener
 	private String lookForWinner()
 	{
 		String[][] current = new String[3][3];
-		int counter = 0;
-		String winner = "";
 		for (int i = 0; i < 3; i++)	{
 			for (int x = 0; x < 3; x++)	{
 				current[i][x]= squares[i][x].getText();
-				System.out.print(current[i][x]);
 			}
-			System.out.println("");
 		}
 		for (int z = 0; z < 3; z++)	{
+			int horizontal = 0, vertical = 0, diag1 = 0, diag2 = 0;
 			for (int i = 0; i < 3; i++)	{
-				for (int x = 0; x < 3; x++)	{
-					if (Arrays.asList(current[z][i]).contains(current[z][x]))
-						counter++;
-				}
-				if (counter == 3)	{
-					winner = current[z][i];
-					break;
-				}
+				if (current[z][i].equals(current[z][0]) && !(current[z][0].equals("")))
+					horizontal++;
+				if (current[i][z].equals(current[0][z]) && !(current[0][z].equals("")))
+					vertical++;
+				if (current[i][i].equals(current[0][z]) && !(current[0][z].equals("")))
+					diag1++;
+				if (current[i][2-i].equals(current[2][z]) && !(current[2][z].equals("")))
+					diag2++;
+				if (diag2 == 3 || horizontal == 3 || vertical == 3 || diag1 == 3)
+					return whoseTurn;
 			}
-			if (counter == 3)
-				break;
 		}
-		return winner;
+		return "";
 	}
 
 	/*
@@ -231,7 +266,33 @@ public class TicTacToe extends JFrame implements ActionListener
 
 	public static void main(String[] args)
 	{
-		TicTacToe game = new TicTacToe();
+		TicTacToe_HC game = new TicTacToe_HC();
 		game.setVisible(true);
+	}
+
+	public void setCompMode() {
+		score.setText("Your turn");
+	}
+	
+	public void compTurn() {
+		String[][] current = new String[3][3];
+		for (int i = 0; i < 3; i++)	{
+			for (int x = 0; x < 3; x++)	{
+				current[i][x]= squares[i][x].getText();
+			}
+		}
+		
+		lookForSpot(current);
+	}
+	
+	public void lookForSpot(String[][] current) {
+		//I want this method to see if there are any possible areas to win, and if so to take them.
+		for (int i = 0; i < 3; i++)	{
+			for (int x = 0; x < 3; x++)	{
+				if (current[i][x].equals("O")) {
+					
+				}
+			}
+		}
 	}
 }
