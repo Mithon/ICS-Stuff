@@ -13,7 +13,8 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	private static final int BOARD_SIZE = 3;
 	private String[][] board;
 
-	private JButton squares[][];     
+	private JButton squares[][];  
+	private int turnCounter;
 	private JButton newGameButton;
 	private JLabel score;
 	private int emptySquaresLeft;
@@ -125,7 +126,8 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 		score.setText(whoseTurn + "'s turn");
 		if (((JCheckBox)compMode).isSelected())
 			setCompMode();
-		newGameButton.setEnabled(false);
+		//newGameButton.setEnabled(false);
+		turnCounter = 0;
 	}
 
 	/**
@@ -154,6 +156,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 				if (theButton == squares[i][j])
 				{                    
 					squares[i][j].setText(whoseTurn);
+					turnCounter++;
 					squares[i][j].setEnabled(false);
 					emptySquaresLeft--;
 
@@ -182,7 +185,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 								score.setText("The computer won!");
 						}
 						else
-						score.setText(winner + " won!");
+							score.setText(winner + " won!");
 					} 
 					return;
 				}
@@ -225,14 +228,14 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	private String lookForWinner()
 	{
 		String[][] current = new String[3][3];
-		for (int i = 0; i < 3; i++)	{
-			for (int x = 0; x < 3; x++)	{
+		for (int i = 0; i < 3; i++)        {
+			for (int x = 0; x < 3; x++)        {
 				current[i][x]= squares[i][x].getText();
 			}
 		}
-		for (int z = 0; z < 3; z++)	{
+		for (int z = 0; z < 3; z++)        {
 			int horizontal = 0, vertical = 0, diag1 = 0, diag2 = 0;
-			for (int i = 0; i < 3; i++)	{
+			for (int i = 0; i < 3; i++)        {
 				if (current[z][i].equals(current[z][0]) && !(current[z][0].equals("")))
 					horizontal++;
 				if (current[i][z].equals(current[0][z]) && !(current[0][z].equals("")))
@@ -273,24 +276,43 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	public void setCompMode() {
 		score.setText("Your turn");
 	}
-	
+
 	public void compTurn() {
 		String[][] current = new String[3][3];
-		for (int i = 0; i < 3; i++)	{
-			for (int x = 0; x < 3; x++)	{
+		for (int i = 0; i < 3; i++)        {
+			for (int x = 0; x < 3; x++)        {
 				current[i][x]= squares[i][x].getText();
 			}
 		}
-		
+
+		//the first move is what decides the game
+		boolean middleSpot = false, cornerSpot = false, edgeSpot = false;
+		if (turnCounter == 1)	{
+			for (int y = 0; y < 3; y++)        {
+				for (int x = 0; x < 3; x++)        {
+					if (current [y][x].equals("X")) {
+						if ((y == 0 || y == 2) && (x == 0 || x == 2))
+							cornerSpot = true;
+						if ((y == 0 || y == 2) && x == 1)
+							edgeSpot = true;
+						if (y == 1 && (x == 0 || x == 2))
+							edgeSpot = true;
+						if (y == 1 && x == 1)
+							middleSpot = true;
+					}
+				}
+			}
+			System.out.println("middleSpot: " + middleSpot + "  cornerSpot: " + cornerSpot + "  edgeSpot: " + edgeSpot);
+		}
 		lookForSpot(current);
 	}
-	
+
 	public void lookForSpot(String[][] current) {
 		//I want this method to see if there are any possible areas to win, and if so to take them.
-		for (int i = 0; i < 3; i++)	{
-			for (int x = 0; x < 3; x++)	{
+		for (int i = 0; i < 3; i++)        {
+			for (int x = 0; x < 3; x++)        {
 				if (current[i][x].equals("O")) {
-					
+
 				}
 			}
 		}
