@@ -287,7 +287,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 
 		//the first move is what decides the game
 		boolean middleSpot = false, cornerSpot = false, edgeSpot = false;
-		if (turnCounter == 1)	{
+		if (turnCounter == 1)        {
 			for (int y = 0; y < 3; y++)        {
 				for (int x = 0; x < 3; x++)        {
 					if (current [y][x].equals("X")) {
@@ -302,19 +302,59 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 					}
 				}
 			}
-			System.out.println("middleSpot: " + middleSpot + "  cornerSpot: " + cornerSpot + "  edgeSpot: " + edgeSpot);
 		}
-		lookForSpot(current);
+		if (middleSpot == true && whoseTurn.equals("O")) {
+			compTakeSpot(0,0);
+		}
+		if (cornerSpot == true && whoseTurn.equals("O")) {
+			compTakeSpot(1,1);
+		}
+		//lookForSpot(current, "O");
 	}
 
-	public void lookForSpot(String[][] current) {
+	public void lookForSpot(String[][] current, String letter) {
+		String bad = "";
+		if (letter.equals("O"))
+			bad = "X";
+		if (letter.equals("X"))
+			bad = "O";
+		int[] row = new int[3];
+		int[] column = new int[3];
+		int[] diag = new int[2];
+		boolean[][] possibleSpots = new boolean[3][3];
 		//I want this method to see if there are any possible areas to win, and if so to take them.
-		for (int i = 0; i < 3; i++)        {
-			for (int x = 0; x < 3; x++)        {
-				if (current[i][x].equals("O")) {
-
-				}
+		for (int z = 0; z < 3; z++)        {
+			for (int i = 0; i < 3; i++)        {
+				if (current[z][i].equals(letter))
+					row[z]++;
+				if (current[z][i].equals(bad))
+					row[z]--;
+				if (current[i][z].equals(letter))
+					column[z]++;
+				if (current[i][z].equals(bad))
+					column[z]--;
+				if (current[i][i].equals(letter))
+					diag[0]++;
+				if (current[i][i].equals(bad))
+					diag[0]++;
+				if (current[i][2-i].equals(letter))
+					diag[1]++;
+				if (current[i][2-i].equals(bad))
+					diag[1]++;
 			}
 		}
+		for (int i = 0; i < 3; i++)        {
+			//if (row[i] == 2)
+		}
 	}
+	
+	public void compTakeSpot (int x, int y) {
+		squares[x][y].setText(whoseTurn);
+		board[x][y] = whoseTurn;
+		turnCounter++;
+		squares[x][y].setEnabled(false);
+		emptySquaresLeft--;
+		toggleTurn();
+	}
+	
 }
