@@ -3,7 +3,6 @@
  */
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Arrays;
 
 import javax.swing.*;
 
@@ -138,8 +137,6 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	{
 
 		JButton theButton = (JButton) e.getSource();
-		String winner = "";
-
 		// Is this a New Game button?
 		if (theButton == newGameButton)
 		{
@@ -159,34 +156,11 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 					turnCounter++;
 					squares[i][j].setEnabled(false);
 					emptySquaresLeft--;
+					toggleTurn();
 
 					board[i][j] = whoseTurn;
-					winner = lookForWinner();  
+					lookForWinner();  
 
-					if (winner.equals(""))
-					{
-						if (emptySquaresLeft == 0)
-						{
-							endTheGame();
-							score.setText("It's a tie!");
-						}
-						else
-						{
-							toggleTurn();
-						}
-					}
-					else
-					{
-						endTheGame();
-						if (comp == true) {
-							if (winner == "X")
-								score.setText("You won!");
-							else
-								score.setText("The computer won!");
-						}
-						else
-							score.setText(winner + " won!");
-					} 
 					return;
 				}
 			}
@@ -225,8 +199,9 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	 *  squares with the same label (other than blank)
 	 *  @return "X", "O", or "" (for no winner)     
 	 */
-	private String lookForWinner()
+	private void lookForWinner()
 	{
+		String winner = "";
 		String[][] current = new String[3][3];
 		for (int i = 0; i < 3; i++)        {
 			for (int x = 0; x < 3; x++)        {
@@ -245,10 +220,31 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 				if (current[i][2-i].equals(current[2][z]) && !(current[2][z].equals("")))
 					diag2++;
 				if (diag2 == 3 || horizontal == 3 || vertical == 3 || diag1 == 3)
-					return whoseTurn;
+					winner = whoseTurn;
 			}
 		}
-		return "";
+
+
+		if (winner.equals(""))
+		{
+			if (emptySquaresLeft == 0)
+			{
+				endTheGame();
+				score.setText("It's a tie!");
+			}
+		}
+		else
+		{
+			endTheGame();
+			if (comp == true) {
+				if (winner == "X")
+					score.setText("You won!");
+				else
+					score.setText("The computer won!");
+			}
+			else
+				score.setText(winner + " won!");
+		}
 	}
 
 	/*
@@ -287,16 +283,23 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 
 		//the first move is what decides the game
 		boolean middleSpot = false, cornerSpot = false, edgeSpot = false;
+		int xCord = 0, yCord = 0;
 		if (turnCounter == 1)        {
 			for (int y = 0; y < 3; y++)        {
 				for (int x = 0; x < 3; x++)        {
 					if (current [y][x].equals("X")) {
 						if ((y == 0 || y == 2) && (x == 0 || x == 2))
 							cornerSpot = true;
-						if ((y == 0 || y == 2) && x == 1)
+						if ((y == 0 || y == 2) && x == 1)	{
 							edgeSpot = true;
-						if (y == 1 && (x == 0 || x == 2))
+							xCord = x;
+							yCord = y;
+						}
+						if (y == 1 && (x == 0 || x == 2)) {
 							edgeSpot = true;
+							xCord = x;
+							yCord = y;
+						}
 						if (y == 1 && x == 1)
 							middleSpot = true;
 					}
@@ -309,19 +312,30 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 		if (cornerSpot == true && whoseTurn.equals("O")) {
 			compTakeSpot(1,1);
 		}
-		//lookForSpot(current, "O");
+		if (edgeSpot == true && whoseTurn.equals("O"))	{
+			if (yCord == 1)
+				compTakeSpot(0, xCord);
+			else {
+				compTakeSpot(yCord, xCord-1);
+			}
+		}
+		boolean[][] compSpots = lookForSpot(current, "O", "X");
+		boolean[][] playerSpots = lookForSpot(current, "X", "O");
+		for (int y = 0; y < 3; y++)        {
+			for (int x = 0; x < 3; x++)        {
+				if (compSpots[y][x] == true && whoseTurn.equals("O"))
+					compTakeSpot(y, x);
+				if (playerSpots[y][x] == true && whoseTurn.equals("O"))
+					compTakeSpot(y, x);
+			}
+		}
 	}
 
-	public void lookForSpot(String[][] current, String letter) {
-		String bad = "";
-		if (letter.equals("O"))
-			bad = "X";
-		if (letter.equals("X"))
-			bad = "O";
+	public boolean[][] lookForSpot(String[][] current, String letter, String bad) {
 		int[] row = new int[3];
 		int[] column = new int[3];
 		int[] diag = new int[2];
-		boolean[][] possibleSpots = new boolean[3][3];
+		boolean[][] possibleSpots = {{false, false, false}, {false, false, false}, {false, false, false}};
 		//I want this method to see if there are any possible areas to win, and if so to take them.
 		for (int z = 0; z < 3; z++)        {
 			for (int i = 0; i < 3; i++)        {
@@ -336,25 +350,60 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 				if (current[i][i].equals(letter))
 					diag[0]++;
 				if (current[i][i].equals(bad))
-					diag[0]++;
+					diag[0]--;
 				if (current[i][2-i].equals(letter))
 					diag[1]++;
 				if (current[i][2-i].equals(bad))
-					diag[1]++;
+					diag[1]--;
 			}
 		}
-		for (int i = 0; i < 3; i++)        {
-			//if (row[i] == 2)
+		for (int z = 0; z < 3; z++)        {
+			for (int i = 0; i < 3; i++)        {
+				if (row[z] == 2)	{
+					if (!(current[z][i].equals(letter)) && !(current[z][i].equals(bad))) {
+						possibleSpots[z][i] = true;
+					}
+				}
+				if (column[z] == 2)	{
+					if (!(current[i][z].equals(letter)) && !(current[i][z].equals(bad))) {
+						possibleSpots[i][z] = true;
+					}
+				}
+				if (z < 3) {
+					if (diag[0] == 2)	{
+						if (!(current[i][i].equals(letter)) && !(current[i][i].equals(bad))) {
+							possibleSpots[i][i] = true;
+						}
+					}
+					if (diag[0] == 2)	{
+						if (!(current[i][2-i].equals(letter)) && !(current[i][2-i].equals(bad))) {
+							possibleSpots[i][2-i] = true;
+						}
+					}
+				}
+			}
 		}
+
+		if (letter.equals("O"))	{
+			for (int z = 0; z < 3; z++)        {
+				for (int i = 0; i < 3; i++)        {
+					System.out.print(possibleSpots[z][i] + "  ");
+				}
+				System.out.println();
+			}
+		}
+
+		return possibleSpots;
 	}
-	
+
 	public void compTakeSpot (int x, int y) {
 		squares[x][y].setText(whoseTurn);
 		board[x][y] = whoseTurn;
 		turnCounter++;
 		squares[x][y].setEnabled(false);
 		emptySquaresLeft--;
+		lookForWinner();
 		toggleTurn();
 	}
-	
+
 }
