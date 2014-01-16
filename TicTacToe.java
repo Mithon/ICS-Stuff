@@ -3,6 +3,7 @@
  */
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -157,6 +158,8 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 					squares[i][j].setEnabled(false);
 					emptySquaresLeft--;
 					toggleTurn();
+					if (comp == true)
+						compTurn();
 
 					board[i][j] = whoseTurn;
 					lookForWinner();  
@@ -188,8 +191,6 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 		}
 		else
 			score.setText(whoseTurn + "'s turn");
-		if (comp == true)
-			compTurn();
 	}
 
 	/*
@@ -290,7 +291,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 					if (current [y][x].equals("X")) {
 						if ((y == 0 || y == 2) && (x == 0 || x == 2))
 							cornerSpot = true;
-						if ((y == 0 || y == 2) && x == 1)	{
+						if ((y == 0 || y == 2) && x == 1)        {
 							edgeSpot = true;
 							xCord = x;
 							yCord = y;
@@ -312,13 +313,14 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 		if (cornerSpot == true && whoseTurn.equals("O")) {
 			compTakeSpot(1,1);
 		}
-		if (edgeSpot == true && whoseTurn.equals("O"))	{
+		if (edgeSpot == true && whoseTurn.equals("O"))        {
 			if (yCord == 1)
 				compTakeSpot(0, xCord);
 			else {
 				compTakeSpot(yCord, xCord-1);
 			}
 		}
+
 		boolean[][] compSpots = lookForSpot(current, "O", "X");
 		boolean[][] playerSpots = lookForSpot(current, "X", "O");
 		for (int y = 0; y < 3; y++)        {
@@ -328,6 +330,17 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 				if (playerSpots[y][x] == true && whoseTurn.equals("O"))
 					compTakeSpot(y, x);
 			}
+		}
+
+		while (whoseTurn.equals("O")) {
+			boolean[][] openSpots = {{false, false, false}, {false, false, false}, {false, false, false}};
+			for (int y = 0; y < 3; y++)        {
+				for (int x = 0; x < 3; x++)        {
+					if (!(current[y][x].equals("X") && !(current[y][x].equals("O"))))
+						openSpots[y][x] = true;
+				}
+			}
+			//make me choose on of the true spots
 		}
 	}
 
@@ -347,44 +360,44 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 					column[z]++;
 				if (current[i][z].equals(bad))
 					column[z]--;
-				if (current[i][i].equals(letter))
-					diag[0]++;
-				if (current[i][i].equals(bad))
-					diag[0]--;
-				if (current[i][2-i].equals(letter))
-					diag[1]++;
-				if (current[i][2-i].equals(bad))
-					diag[1]--;
+				if (z == 0) {
+					if (current[i][i].equals(letter))
+						diag[0]++;
+					if (current[i][i].equals(bad))
+						diag[0]--;
+					if (current[i][2-i].equals(letter))
+						diag[1]++;
+					if (current[i][2-i].equals(bad))
+						diag[1]--;
+				}
 			}
 		}
 		for (int z = 0; z < 3; z++)        {
 			for (int i = 0; i < 3; i++)        {
-				if (row[z] == 2)	{
+				if (row[z] == 2)        {
 					if (!(current[z][i].equals(letter)) && !(current[z][i].equals(bad))) {
 						possibleSpots[z][i] = true;
 					}
 				}
-				if (column[z] == 2)	{
+				if (column[z] == 2)        {
 					if (!(current[i][z].equals(letter)) && !(current[i][z].equals(bad))) {
 						possibleSpots[i][z] = true;
 					}
 				}
-				if (z < 3) {
-					if (diag[0] == 2)	{
-						if (!(current[i][i].equals(letter)) && !(current[i][i].equals(bad))) {
-							possibleSpots[i][i] = true;
-						}
+				if (diag[0] == 2)        {
+					if (!(current[i][i].equals(letter)) && !(current[i][i].equals(bad))) {
+						possibleSpots[i][i] = true;
 					}
-					if (diag[0] == 2)	{
-						if (!(current[i][2-i].equals(letter)) && !(current[i][2-i].equals(bad))) {
-							possibleSpots[i][2-i] = true;
-						}
+				}
+				if (diag[1] == 2)        {
+					if (!(current[i][2-i].equals(letter)) && !(current[i][2-i].equals(bad))) {
+						possibleSpots[i][2-i] = true;
 					}
 				}
 			}
 		}
 
-		if (letter.equals("O"))	{
+		if (letter.equals("O"))        {
 			for (int z = 0; z < 3; z++)        {
 				for (int i = 0; i < 3; i++)        {
 					System.out.print(possibleSpots[z][i] + "  ");
