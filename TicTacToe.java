@@ -310,17 +310,29 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 			}
 		}
 		if (middleSpot == true && whoseTurn.equals("O")) {
-			compTakeSpot(0,0);
+			int randomCorner = (0 + (int)(Math.random() * (((3) - 0) + 1)));
+			if (randomCorner == 0)
+				compTakeSpot(0,0);
+			if (randomCorner == 1)
+				compTakeSpot(2,2);
+			if (randomCorner == 2)
+				compTakeSpot(0,2);
+			if (randomCorner == 3)
+				compTakeSpot(2,0);
 		}
 		if (cornerSpot == true && whoseTurn.equals("O")) {
 			compTakeSpot(1,1);
 		}
 		if (edgeSpot == true && whoseTurn.equals("O"))        {
-			if (yCord == 1)
+			int randomCorner = (0 + (int)(Math.random() * (((1) - 0) + 1)));
+			if (yCord == 1 && randomCorner == 0)
 				compTakeSpot(0, xCord);
-			else {
-				compTakeSpot(yCord, xCord-1);
-			}
+			if (yCord == 1 && randomCorner == 1)
+				compTakeSpot(2, xCord);
+			if ((xCord == 1 && randomCorner == 0))
+				compTakeSpot(yCord, 0);
+			if ((xCord == 1 && randomCorner == 1))
+				compTakeSpot(yCord, 2);
 		}
 
 		boolean[][] compSpots = lookForSpot(current, "O", "X");
@@ -350,9 +362,9 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 			for (int y = 0; y < 3; y++)        {
 				for (int x = 0; x < 3; x++)        {
 					if (!(current[y][x].equals("X") && !(current[y][x].equals("O"))))	{
-							openSpotCoords[counter][0] = y;
-							openSpotCoords[counter][1] = x;
-							counter++;
+						openSpotCoords[counter][0] = y;
+						openSpotCoords[counter][1] = x;
+						counter++;
 					}
 				}
 			}
