@@ -21,6 +21,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	private String whoseTurn;
 	private JCheckBox compMode;
 	private Boolean comp = false;
+	private Boolean turnTaken = false;
 
 
 	/** 
@@ -275,6 +276,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 	}
 
 	public void compTurn() {
+		turnTaken = false;
 		String[][] current = new String[3][3];
 		for (int i = 0; i < 3; i++)        {
 			for (int x = 0; x < 3; x++)        {
@@ -332,15 +334,30 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 			}
 		}
 
-		while (whoseTurn.equals("O")) {
+		if (turnTaken == false) {
 			boolean[][] openSpots = {{false, false, false}, {false, false, false}, {false, false, false}};
+			int openSpotAmount = 0;
 			for (int y = 0; y < 3; y++)        {
 				for (int x = 0; x < 3; x++)        {
-					if (!(current[y][x].equals("X") && !(current[y][x].equals("O"))))
+					if (!(current[y][x].equals("X") && !(current[y][x].equals("O"))))	{
 						openSpots[y][x] = true;
+						openSpotAmount++;
+					}
 				}
 			}
-			//make me choose on of the true spots
+			int[][] openSpotCoords = new int[openSpotAmount][2];
+			int counter = 0;
+			for (int y = 0; y < 3; y++)        {
+				for (int x = 0; x < 3; x++)        {
+					if (!(current[y][x].equals("X") && !(current[y][x].equals("O"))))	{
+							openSpotCoords[counter][0] = y;
+							openSpotCoords[counter][1] = x;
+							counter++;
+					}
+				}
+			}
+			int randomSpot = (0 + (int)(Math.random() * (((openSpotAmount-1) - 0) + 1)));
+			compTakeSpot(openSpotCoords[randomSpot][0], openSpotCoords[randomSpot][1]);
 		}
 	}
 
@@ -397,15 +414,6 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 			}
 		}
 
-		if (letter.equals("O"))        {
-			for (int z = 0; z < 3; z++)        {
-				for (int i = 0; i < 3; i++)        {
-					System.out.print(possibleSpots[z][i] + "  ");
-				}
-				System.out.println();
-			}
-		}
-
 		return possibleSpots;
 	}
 
@@ -416,6 +424,7 @@ public class TicTacToe_HC extends JFrame implements ActionListener
 		squares[x][y].setEnabled(false);
 		emptySquaresLeft--;
 		lookForWinner();
+		turnTaken = true;
 		toggleTurn();
 	}
 
